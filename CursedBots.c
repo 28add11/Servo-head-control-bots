@@ -16,10 +16,15 @@ int main()
 	pwm_set_wrap(slice_num, 65535);
 	pwm_set_enabled(slice_num, true);
 
+	uint8_t angle;
+	uint inputDuty;
+
     while (true) {
-        pwm_set_chan_level(slice_num, channel, 3277);
-		busy_wait_ms(1000);
-		pwm_set_chan_level(slice_num, channel, 9000);
-		busy_wait_ms(1000);
+        printf("Enter the angle to test: ");
+		fgets(&angle, 1, stdin);
+		printf("\n");
+		angle = angle % 180;
+		inputDuty = angle / 180.0 * 8000 + 1000; // Turns angle into a val between 0 and 1, then calculates duty with an ez multiplication
+		pwm_set_chan_level(slice_num, channel, inputDuty);
     }
 }
